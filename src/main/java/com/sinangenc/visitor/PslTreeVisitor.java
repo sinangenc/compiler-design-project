@@ -177,7 +177,7 @@ public class PslTreeVisitor extends PslGrammarBaseVisitor<Object> {
         Boolean result = switch (ctx.getChild(1).getText()){
             case "==" -> operand.equals(operand2);
             case "!=" -> !operand.equals(operand2);
-            default -> throw new IllegalStateException("Unexpected value: " + ctx.getChild(1).getText());
+            default -> throw new UnsupportedOperationException("Unexpected value: " + ctx.getChild(1).getText()); // will be never used
         };
 
         return result;
@@ -199,7 +199,7 @@ public class PslTreeVisitor extends PslGrammarBaseVisitor<Object> {
             case ">=" -> operand >= operand2;
             case "<" -> operand < operand2;
             case "<=" -> operand <= operand2;
-            default -> throw new IllegalStateException("Unexpected value: " + ctx.getChild(1).getText());
+            default -> throw new UnsupportedOperationException("Unexpected operator: " + ctx.getChild(1).getText()); // will be never used
         };
 
         return result;
@@ -227,7 +227,8 @@ public class PslTreeVisitor extends PslGrammarBaseVisitor<Object> {
                         result = Converter.getString(result) + Converter.getString(operand);
                     }
                     else{
-                        throw new RuntimeException("En az biri string olmali yada double + double");
+                        throw new UnsupportedOperationException("In addition operation, either both parameters must " +
+                                "be NUMBER or at least one of the parameters must be of type STRING.");
                     }
                 }
                 else { // equals("-")
@@ -289,9 +290,6 @@ public class PslTreeVisitor extends PslGrammarBaseVisitor<Object> {
 
                 return result;
             }
-
-
-            //throw new UnsupportedOperationException("Not yet implemented!!! " + result);
         }
     }
 
