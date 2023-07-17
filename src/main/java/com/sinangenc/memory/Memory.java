@@ -30,7 +30,7 @@ public class Memory<T> implements MemoryInterface<T> {
     public void define(String variableName){
         if (check(variableName)){
             throw new IllegalArgumentException(
-                    String.format("Variable<%s> has already defined!", variableName)
+                    String.format("Variable<%s> has already been defined!", variableName)
             );
         }
 
@@ -41,7 +41,7 @@ public class Memory<T> implements MemoryInterface<T> {
     public void assign(String variableName, T value){
         if (!check(variableName)){
             throw new IllegalArgumentException(
-                    String.format("Variable<%s> has not defined!", variableName)
+                    String.format("Variable<%s> has not been defined yet!", variableName)
             );
         }
 
@@ -53,7 +53,7 @@ public class Memory<T> implements MemoryInterface<T> {
     public T get(String variableName){
         if (!check(variableName)){
             throw new IllegalArgumentException(
-                    String.format("Variable<%s> has not defined!", variableName)
+                    String.format("Variable<%s> has not been defined yet!", variableName)
             );
         }
 
@@ -71,7 +71,7 @@ public class Memory<T> implements MemoryInterface<T> {
         }
 
         throw new IllegalArgumentException(
-                String.format("Variable<%s> has not defined!", variableName)
+                String.format("Variable<%s> has not been defined yet!", variableName)
         );
     }
     private boolean check(String variableName){

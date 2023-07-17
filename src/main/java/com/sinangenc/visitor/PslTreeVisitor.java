@@ -11,9 +11,10 @@ public class PslTreeVisitor extends PslGrammarBaseVisitor<Object> {
     public Object visitProgram(PslGrammarParser.ProgramContext ctx) {
         //memory.newScope();
 
-        var list = ctx.declaration();
-        for (int i = 0; i < list.size(); i++)
-            visit(list.get(i));
+        var declarationList = ctx.declaration();
+        for (PslGrammarParser.DeclarationContext currentDeclaration : declarationList){
+            visit(currentDeclaration);
+        }
 
         //memory.deleteScope();
 
@@ -24,9 +25,10 @@ public class PslTreeVisitor extends PslGrammarBaseVisitor<Object> {
     public Object visitBlock(PslGrammarParser.BlockContext ctx) {
         memory.newScope();
 
-        var list = ctx.declaration();
-        for (int i = 0; i < list.size(); i++)
-            visit(list.get(i));
+        var declarationList = ctx.declaration();
+        for (PslGrammarParser.DeclarationContext currentDeclaration : declarationList){
+            visit(currentDeclaration);
+        }
 
         memory.deleteScope();
 
@@ -122,15 +124,13 @@ public class PslTreeVisitor extends PslGrammarBaseVisitor<Object> {
 
     @Override
     public Object visitValueAssignment(PslGrammarParser.ValueAssignmentContext ctx) {
-        var result = visit(ctx.logic_or());
-        return result;
+        return visit(ctx.logic_or());
     }
 
     @Override
     public Object visitLogic_or(PslGrammarParser.Logic_orContext ctx) {
         if(ctx.getChildCount() == 1){ // Use the result of "logical_and" directly. no need for further processing
-            Object result = visit(ctx.logic_and(0));
-            return result;
+            return visit(ctx.logic_and(0));
         }
         else { // Check, whether all operands are Boolean, and perform LOGICAL_AND operation.
             Boolean result = false;
@@ -148,8 +148,7 @@ public class PslTreeVisitor extends PslGrammarBaseVisitor<Object> {
     @Override
     public Object visitLogic_and(PslGrammarParser.Logic_andContext ctx) {
         if(ctx.getChildCount() == 1){ // Use the result of "equality" directly. no need for further processing
-            Object result = visit(ctx.equality(0));
-            return result;
+            return visit(ctx.equality(0));
         }
         else { // Check, whether all operands are Boolean, and perform LOGICAL_AND operation.
             Boolean result = true;
@@ -166,12 +165,12 @@ public class PslTreeVisitor extends PslGrammarBaseVisitor<Object> {
 
     @Override
     public Object visitEquality(PslGrammarParser.EqualityContext ctx) {
+        Object operand = visit(ctx.comparison(0));
+
         if(ctx.getChildCount() == 1){ // Use the result of "comparison" directly. no need for further processing
-            Object tmpOperand = visit(ctx.comparison(0));
-            return tmpOperand;
+            return operand;
         }
 
-        Object operand = visit(ctx.comparison(0));
         Object operand2 = visit(ctx.comparison(1));
 
         Boolean result = switch (ctx.getChild(1).getText()){
@@ -207,15 +206,11 @@ public class PslTreeVisitor extends PslGrammarBaseVisitor<Object> {
 
     @Override
     public Object visitTerm(PslGrammarParser.TermContext ctx) {
+        Object result = visit(ctx.factor(0));
         if(ctx.getChildCount() == 1){ // Use the result of "factor" directly. no need for further processing
-            Object result = visit(ctx.factor(0));
             return result;
         }
         else {
-            Object result = visit(ctx.factor(0));
-            //Object tmpResult = visit(ctx.factor(0));
-            //Double result = Converter.getDouble(tmpResult);
-
             for (int i = 1; i < ctx.getChildCount(); i+=2){
                 Object operand = visit(ctx.getChild(i+1));
 
@@ -271,23 +266,18 @@ public class PslTreeVisitor extends PslGrammarBaseVisitor<Object> {
     @Override
     public Object visitUnary(PslGrammarParser.UnaryContext ctx) {
         if(ctx.getChildCount() == 1){ // Use the result of "primary" directly. no need for further processing
-            Object result = visit(ctx.primary());
-            return result;
+            return visit(ctx.primary());
         }
         else {
             Object unaryValue = visit(ctx.unary());
 
             if (ctx.NOT() != null) {
                 // Code for handling the NOT case
-
                 Boolean result = !Converter.getBoolean(unaryValue);
-
                 return result;
             } else { //  (ctx.MINUS() != null)
                 // Code for handling the MINUS case
-
                 Double result = - Converter.getDouble(unaryValue);
-
                 return result;
             }
         }
