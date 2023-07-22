@@ -1,4 +1,4 @@
-package com.sinangenc.visitor;
+package com.sinangenc.interpreter;
 
 import com.sinangenc.antlr4generatedfiles.PslGrammarBaseVisitor;
 import com.sinangenc.antlr4generatedfiles.PslGrammarParser;
