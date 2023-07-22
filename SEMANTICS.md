@@ -1,6 +1,6 @@
 # Semantic Rules
 
-Here are some semantic rules which I implemented to the interpreter:
+Here are some semantic rules which are implemented to the interpreter:
 
 ## 1- Implicit Boolean Conversion
 
@@ -8,7 +8,7 @@ Here are some semantic rules which I implemented to the interpreter:
 
 **A:** Non-boolean values are not allowed where a boolean value is expected. For non-boolean values type casting is not performed implicitly. In this case a runtime exception is thrown.
 
-**The reason for the decision:** Implicit boolean conversion brings with it many edge cases and error-proneness. E.g. "false" =? or "0" =?
+**The reason for the decision:** Implicit boolean conversion brings with it many edge cases and error-proneness. E.g. "false" or "0"
 
 **How to check:** Dynamically. Additionally, 2 grammar rules have been changed as follows:
 
@@ -37,29 +37,29 @@ comparison
 Interpreter only recognizes the operations in the table below. An exception is thrown for incompatible data types.
 
 | **Operator Type** | **Operator** | **Operand 1** | **Operand 2** | **Operation**            |
-|-------------------|--------------|---------------|---------------|--------------------------|
-| Unary             | -            | Number        | -             | Negates the number       |
-| Arithmetic        | +            | Number        | Number        | Addition                 |
-| Arithmetic        | +            | String        | Any           | Concatenation **(\*)**   |
-| Arithmetic        | -            | Number        | Number        | Subtraction              |
-| Arithmetic        | *            | Number        | Number        | Multiplication           |
-| Arithmetic        | /            | Number        | Number        | Division                 |
-| Logical           | !            | Boolean       | -             | Logical NOT              |
-| Logical           | AND          | Boolean       | Boolean       | Logical AND              |
-| Logical           | OR           | Boolean       | Boolean       | Logical OR               |
-| Comparison        | ==           | Any           | Any           | Equality Check           |
-| Comparison        | !=           | Any           | Any           | Inequality Check         |
-| Comparison        | \>           | Number        | Number        | Greater than             |
-| Comparison        | \>=          | Number        | Number        | Greater than or equal to |
-| Comparison        | <            | Number        | Number        | Less than                |
-| Comparison        | <=           | Number        | Number        | Less than or equal to    |
+|-------------------|--------------|---------------|--------------|--------------------------|
+| Unary             | -            | Number        |              | Negates the number       |
+| Arithmetic        | +            | Number        | Number       | Addition                 |
+| Arithmetic        | +            | String        | Any          | Concatenation **(\*)**   |
+| Arithmetic        | -            | Number        | Number       | Subtraction              |
+| Arithmetic        | *            | Number        | Number       | Multiplication           |
+| Arithmetic        | /            | Number        | Number       | Division                 |
+| Logical           | !            | Boolean       |             | Logical NOT              |
+| Logical           | AND          | Boolean       | Boolean      | Logical AND              |
+| Logical           | OR           | Boolean       | Boolean      | Logical OR               |
+| Comparison        | ==           | Any           | Any          | Equality Check           |
+| Comparison        | !=           | Any           | Any          | Inequality Check         |
+| Comparison        | \>           | Number        | Number       | Greater than             |
+| Comparison        | \>=          | Number        | Number       | Greater than or equal to |
+| Comparison        | <            | Number        | Number       | Less than                |
+| Comparison        | <=           | Number        | Number       | Less than or equal to    |
 
 **(\*)** In String Concatenation, operands can be in any order. The important thing is that at least one of the operands is of type String.
 
 **(\*\*)** Any: It can be a String, a Number or a Boolean.
 
 
-**The reason for the decision:** I tried to avoid operator overloading. Because the expressions like 'my string' - 2 are often confusing. The only exception ist '+' operator used for string concatenation.
+**The reason for the decision:** To avoid operator overloading. Because the expressions like '5' - 2 are often confusing. The only exception ist '+' operator used for string concatenation.
 
 **How to check:** Dynamically.
 
@@ -87,6 +87,6 @@ Interpreter only recognizes the operations in the table below. An exception is t
 
 **A:** Variables that are declared but not yet initialized have no default values. Therefore, before using a variable, it must be explicitly assigned a value. Otherwise, an exception is thrown.
 
-**The reason for the decision:** Our language is a dynamically-typed language. We have only one keyword ('var') to variable declaration. Therefore, without assigning a value it is not possible to decide its data type. In this case, relying on default values could lead to errors.  
+**The reason for the decision:** Our language is a dynamically-typed language and there is no implicit conversion. We have only one keyword ('var') to variable declaration. Therefore, without assigning a value it is not possible to decide its data type. In this case, relying on default values could lead to errors.  
 
-**How to check:** Assign 'null' to defined but not initialized variables while storing them. Check the value of variable before using it. If it is still null, this means that, it has not yet initialized. 
+**How to check:** Assign 'null' to defined but not initialized variables while storing them (in Memory.java). Check the value of variable before using it. If it is still null, this means that, it has not yet initialized. 
