@@ -59,7 +59,7 @@ Interpreter only recognizes the operations in the table below. An exception is t
 **(\*\*)** Any: It can be a String, a Number or a Boolean.
 
 
-**The reason for the decision:** To avoid operator overloading. Because the expressions like '5' - 2 are often confusing. The only exception ist '+' operator used for string concatenation.
+**The reason for the decision:** To avoid operator overloading. Because the expressions like boolean + boolean are often confusing. The only exception ist '+' operator used for string concatenation.
 
 **How to check:** Dynamically.
 
